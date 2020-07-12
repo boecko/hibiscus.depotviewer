@@ -127,16 +127,16 @@ public class HBCIDepotUmsatzJob extends AbstractHBCIJob
 							+ t.toString());
 					continue;
 				}
-				String aktion = "";
+				DepotAktion aktion = null;
 				if (t.transaction_indicator == Transaction.INDICATOR_CORPORATE_ACTION 
 						&& t.richtung == Transaction.RICHTUNG_ERHALT) {
-					aktion = DepotAktion.EINBUCHUNG.internal();
+					aktion = DepotAktion.EINBUCHUNG;
 				} else if (t.transaction_indicator == Transaction.INDICATOR_SETTLEMENT_CLEARING 
 						&& t.richtung == Transaction.RICHTUNG_ERHALT) {
-					aktion = DepotAktion.KAUF.internal();
+					aktion = DepotAktion.VERKAUF;
 				}  else if (t.transaction_indicator == Transaction.INDICATOR_SETTLEMENT_CLEARING 
 						&& t.richtung == Transaction.RICHTUNG_LIEFERUNG) {
-					aktion = DepotAktion.VERKAUF.internal();
+					aktion = DepotAktion.KAUF;
 				} else {
 					de.willuhn.logging.Logger.error("Unbekannte Transaktion. Bitte nehmen sie Kontakt zum Author auf.\n"
 							+ t.toString());
@@ -157,7 +157,7 @@ public class HBCIDepotUmsatzJob extends AbstractHBCIJob
 						einzelbetrag = Math.abs(gesamtbetrag) / t.anzahl.getValue().doubleValue();
 					}
 					Utils.addUmsatz(konto.getID(), 
-							Utils.getORcreateWKN(i.wkn, i.isin, i.name), aktion,
+							Utils.getORcreateWKN(i.wkn, i.isin, i.name), aktion.internal(),
 							i.toString() + "\n" + t.toString(),
 							t.anzahl.getValue().doubleValue(),
 							einzelbetrag, waehrung,
