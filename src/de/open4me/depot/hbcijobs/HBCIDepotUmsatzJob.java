@@ -143,6 +143,13 @@ public class HBCIDepotUmsatzJob extends AbstractHBCIJob
 					continue;
 				}
 				String orderid = i.wkn + i.isin + aktion + t.datum + t.anzahl + t.betrag; 
+				if("Einlieferung".equals(t.freitext_details)) {
+					aktion = DepotAktion.EINBUCHUNG;
+				}
+				if("Dividende".equals(t.freitext_details) || "Ausschüttung".equals(t.freitext_details)) {
+					de.willuhn.logging.Logger.info("Skipping Dividende");
+					continue;
+				}
 				try {
 					String waehrung = "";
 					double gesamtbetrag = 0.0d;
