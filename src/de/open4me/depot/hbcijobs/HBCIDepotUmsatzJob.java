@@ -149,8 +149,7 @@ public class HBCIDepotUmsatzJob extends AbstractHBCIJob
 					double einzelbetrag = 0.0d;
 					if (t.betrag != null) {
 						gesamtbetrag = t.betrag.getValue().doubleValue();
-						if ("BIWBDE33XXX".equals(konto.getBic()) || "10130800".equals(konto.getBLZ()))  {
-							// Hack für FlatEx
+						if(gesamtbetrag > 0 && aktion==DepotAktion.KAUF) {
 							gesamtbetrag = -gesamtbetrag;
 						}
 						waehrung = t.betrag.getCurr();
